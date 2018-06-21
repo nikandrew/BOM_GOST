@@ -1,0 +1,9 @@
+E:\Project\BOM_gen\BOM_gen\BOM_gen\obj\x86\Debug\BOM_gen.Form1.resources
+E:\Project\BOM_gen\BOM_gen\BOM_gen\obj\x86\Debug\BOM_gen.Properties.Resources.resources
+E:\Project\BOM_gen\BOM_gen\BOM_gen\obj\x86\Debug\BOM_gen.csproj.GenerateResource.Cache
+E:\Project\BOM_gen\BOM_gen\BOM_gen\bin\Debug\BOM_gen.exe
+E:\Project\BOM_gen\BOM_gen\BOM_gen\bin\Debug\BOM_gen.pdb
+E:\Project\BOM_gen\BOM_gen\BOM_gen\obj\x86\Debug\BOM_gen.exe
+E:\Project\BOM_gen\BOM_gen\BOM_gen\obj\x86\Debug\BOM_gen.pdb
+E:\Project\BOM_gen\BOM_GOST\BOM_gen\obj\x86\Debug\BOM_gen.exe
+E:\Project\BOM_gen\BOM_GOST\BOM_gen\obj\x86\Debug\BOM_gen.pdb
