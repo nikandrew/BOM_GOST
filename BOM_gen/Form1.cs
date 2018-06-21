@@ -54,7 +54,7 @@ namespace BOM_gen
             excelappworkbook = excelappworkbooks[1];
             excelapp.DefaultSaveFormat = Excel.XlFileFormat.xlAddIn8;
             string name_file = textBox1.Text;
-            
+            Data_path.Text = textBox2.Text;
             excelappworkbook.SaveAs(Data_path.Text+name_file+" ПЭ3.xls",  //object Filename
                   Excel.XlFileFormat.xlAddIn8,          //object FileFormat
                   Type.Missing,                       //object Password 
