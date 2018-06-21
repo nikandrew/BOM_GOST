@@ -51,23 +51,48 @@ namespace BOM_gen
             //excelapp.DisplayAlerts = false;
             //excelapp.DisplayAlerts = true;
             excelappworkbooks = excelapp.Workbooks;
-            excelappworkbook = excelappworkbooks[1];
-            excelapp.DefaultSaveFormat = Excel.XlFileFormat.xlAddIn8;
-            string name_file = textBox1.Text;
-            Data_path.Text = textBox2.Text;
-            excelappworkbook.SaveAs(Data_path.Text+name_file+" ПЭ3.xls",  //object Filename
-                  Excel.XlFileFormat.xlAddIn8,          //object FileFormat
-                  Type.Missing,                       //object Password 
-                  Type.Missing,                       //object WriteResPassword  
-                  Type.Missing,                       //object ReadOnlyRecommended
-                  Type.Missing,                       //object CreateBackup
-                  Excel.XlSaveAsAccessMode.xlNoChange,//XlSaveAsAccessMode AccessMode
-                  Type.Missing,                       //object ConflictResolution
-                  Type.Missing,                       //object AddToMru 
-                  Type.Missing,                       //object TextCodepage
-                  Type.Missing,                       //object TextVisualLayout
-                  Type.Missing);    
-            excelapp.Quit();
+            excelapp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
+            try
+            {
+                excelappworkbook = excelappworkbooks[1];
+                excelapp.DefaultSaveFormat = Excel.XlFileFormat.xlAddIn8;
+                string name_file = textBox1.Text;
+                Data_path.Text = textBox2.Text;
+                if (Directory.Exists(Data_path.Text))
+                {
+                    richTextBox1.AppendText("Файл " + Data_path.Text + name_file + " ПЭ3.xls сохранен \n");                 
+
+                    excelappworkbook.SaveAs(Data_path.Text + name_file + " ПЭ3.xls",  //object Filename
+                    Excel.XlFileFormat.xlAddIn8,          //object FileFormat
+                            Type.Missing,                       //object Password 
+                            Type.Missing,                       //object WriteResPassword  
+                            Type.Missing,                       //object ReadOnlyRecommended
+                            Type.Missing,                       //object CreateBackup
+                            Excel.XlSaveAsAccessMode.xlNoChange,//XlSaveAsAccessMode AccessMode
+                            Type.Missing,                       //object ConflictResolution
+                            Type.Missing,                       //object AddToMru 
+                            Type.Missing,                       //object TextCodepage
+                            Type.Missing,                       //object TextVisualLayout
+                            Type.Missing);
+                    excelappworkbook.Close();
+                    excelapp.Quit();
+                    excelWindow.Close();
+                }
+                else
+                {
+                    richTextBox1.AppendText( "Каталог " + Data_path.Text + " не найден \n");
+                }
+            }
+            catch (Exception)
+            {
+                richTextBox1.AppendText("Нет открытых файлов \n");
+            }
+            
+            
+            
+
+              
+            
         }
 
         private void button3_Click(object sender, EventArgs e)
