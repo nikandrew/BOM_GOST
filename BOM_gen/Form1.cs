@@ -51,6 +51,7 @@ namespace BOM_gen
             //excelapp.DisplayAlerts = false;
             //excelapp.DisplayAlerts = true;
             excelappworkbooks = excelapp.Workbooks;
+
             excelapp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
             try
             {
@@ -88,11 +89,29 @@ namespace BOM_gen
                 richTextBox1.AppendText("Нет открытых файлов \n");
             }
             
-            
-            
+                       
 
               
             
+
+            excelappworkbook = excelappworkbooks[1];
+            excelapp.DefaultSaveFormat = Excel.XlFileFormat.xlAddIn8;
+            string name_file2 = textBox1.Text;
+            
+            excelappworkbook.SaveAs(Data_path.Text+name_file2+" ПЭ3.xls",  //object Filename
+                  Excel.XlFileFormat.xlAddIn8,          //object FileFormat
+                  Type.Missing,                       //object Password 
+                  Type.Missing,                       //object WriteResPassword  
+                  Type.Missing,                       //object ReadOnlyRecommended
+                  Type.Missing,                       //object CreateBackup
+                  Excel.XlSaveAsAccessMode.xlNoChange,//XlSaveAsAccessMode AccessMode
+                  Type.Missing,                       //object ConflictResolution
+                  Type.Missing,                       //object AddToMru 
+                  Type.Missing,                       //object TextCodepage
+                  Type.Missing,                       //object TextVisualLayout
+                  Type.Missing);    
+            excelapp.Quit();
+
         }
 
         private void button3_Click(object sender, EventArgs e)
