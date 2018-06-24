@@ -5,3 +5,10 @@ E:\Project\BOM_gen\BOM_gen\BOM_gen\obj\x86\Release\BOM_gen.Properties.Resources.
 E:\Project\BOM_gen\BOM_gen\BOM_gen\obj\x86\Release\BOM_gen.csproj.GenerateResource.Cache
 E:\Project\BOM_gen\BOM_gen\BOM_gen\obj\x86\Release\BOM_gen.exe
 E:\Project\BOM_gen\BOM_gen\BOM_gen\obj\x86\Release\BOM_gen.pdb
+E:\Project\BOM_test\BOM_GOST\BOM_gen\bin\Release\BOM_gen.exe
+E:\Project\BOM_test\BOM_GOST\BOM_gen\bin\Release\BOM_gen.pdb
+E:\Project\BOM_test\BOM_GOST\BOM_gen\obj\x86\Release\BOM_gen.Form1.resources
+E:\Project\BOM_test\BOM_GOST\BOM_gen\obj\x86\Release\BOM_gen.Properties.Resources.resources
+E:\Project\BOM_test\BOM_GOST\BOM_gen\obj\x86\Release\BOM_gen.csproj.GenerateResource.Cache
+E:\Project\BOM_test\BOM_GOST\BOM_gen\obj\x86\Release\BOM_gen.exe
+E:\Project\BOM_test\BOM_GOST\BOM_gen\obj\x86\Release\BOM_gen.pdb

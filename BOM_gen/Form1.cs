@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -15,8 +16,10 @@ namespace BOM_gen
     {
         private Excel.Application excelapp;
         private Excel.Window excelWindow;
+        private System.Diagnostics.Process excelProc = System.Diagnostics.Process.GetProcessesByName("EXCEL").Last();
         private Excel.Workbooks excelappworkbooks;
         private Excel.Workbook excelappworkbook;
+        
         public static class Data_path
         {
             public static string Text { set; get; }
@@ -50,12 +53,12 @@ namespace BOM_gen
             //excelappworkbook.Saved = true;
             //excelapp.DisplayAlerts = false;
             //excelapp.DisplayAlerts = true;
-            excelappworkbooks = excelapp.Workbooks;
+            //excelappworkbooks = excelapp.Workbooks;
 
             excelapp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
             try
             {
-                excelappworkbook = excelappworkbooks[1];
+                
                 excelapp.DefaultSaveFormat = Excel.XlFileFormat.xlAddIn8;
                 string name_file = textBox1.Text;
                 Data_path.Text = textBox2.Text;
@@ -75,9 +78,17 @@ namespace BOM_gen
                             Type.Missing,                       //object TextCodepage
                             Type.Missing,                       //object TextVisualLayout
                             Type.Missing);
-                    excelappworkbook.Close();
+                    excelappworkbook.Close(false, Type.Missing, Type.Missing);
+                    excelappworkbooks.Close();
                     excelapp.Quit();
+                    //excelapp = null;
+                    //excelProc.Kill();
                     excelWindow.Close();
+                    Marshal.ReleaseComObject(excelappworkbook);
+                    Marshal.ReleaseComObject(excelappworkbooks);
+                    Marshal.ReleaseComObject(excelapp);
+
+
                 }
                 else
                 {
@@ -94,23 +105,7 @@ namespace BOM_gen
               
             
 
-            excelappworkbook = excelappworkbooks[1];
-            excelapp.DefaultSaveFormat = Excel.XlFileFormat.xlAddIn8;
-            string name_file2 = textBox1.Text;
-            
-            excelappworkbook.SaveAs(Data_path.Text+name_file2+" ПЭ3.xls",  //object Filename
-                  Excel.XlFileFormat.xlAddIn8,          //object FileFormat
-                  Type.Missing,                       //object Password 
-                  Type.Missing,                       //object WriteResPassword  
-                  Type.Missing,                       //object ReadOnlyRecommended
-                  Type.Missing,                       //object CreateBackup
-                  Excel.XlSaveAsAccessMode.xlNoChange,//XlSaveAsAccessMode AccessMode
-                  Type.Missing,                       //object ConflictResolution
-                  Type.Missing,                       //object AddToMru 
-                  Type.Missing,                       //object TextCodepage
-                  Type.Missing,                       //object TextVisualLayout
-                  Type.Missing);    
-            excelapp.Quit();
+           
 
         }
 
@@ -141,13 +136,15 @@ namespace BOM_gen
             textBox2.Text = Data_path.Text;
             excelapp = new Excel.Application();
             excelapp.Visible = true;
-            excelapp.Workbooks.Open(filename,
+            excelappworkbooks = excelapp.Workbooks;
+            
+            excelappworkbooks.Open(filename,
                           Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                           Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                           Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                           Type.Missing, Type.Missing);
-
-
+            excelappworkbook = excelappworkbooks[1];
+            //excelWindow = excelapp.Windows;
         }
 
        
