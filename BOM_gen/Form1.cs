@@ -57,8 +57,7 @@ namespace BOM_gen
             //excelapp.DisplayAlerts = true;
             //excelappworkbooks = excelapp.Workbooks;
 
-            excelapp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
-            try
+            if(excelapp != null)
             {
                 
                 excelapp.DefaultSaveFormat = Excel.XlFileFormat.xlAddIn8;
@@ -66,42 +65,50 @@ namespace BOM_gen
                 Data_path.Text = textBox2.Text;
                 if (Directory.Exists(Data_path.Text))
                 {
-                    richTextBox1.AppendText("Файл " + Data_path.Text + name_file + " ПЭ3.xls сохранен \n");                 
+                    if (File.Exists(Data_path.Text + name_file + " ПЭ3.xls"))
+                    {
+                        richTextBox1.AppendText("Файл " + Data_path.Text + name_file + " ПЭ3.xls существует и был перезаписан \n");
+                    }
+                    else
+                    {
+                        richTextBox1.AppendText("Файл " + Data_path.Text + name_file + " ПЭ3.xls создан и сохранен \n");
+                    }
+                        
+                        //excelapp.DisplayAlerts = false;
+                        excelappworkbook.SaveAs(Data_path.Text + name_file + " ПЭ3.xls",  //object Filename
+                        Excel.XlFileFormat.xlAddIn8,          //object FileFormat
+                                Type.Missing,                       //object Password 
+                                Type.Missing,                       //object WriteResPassword  
+                                Type.Missing,                       //object ReadOnlyRecommended
+                                Type.Missing,                       //object CreateBackup
+                                Excel.XlSaveAsAccessMode.xlNoChange,//XlSaveAsAccessMode AccessMode
+                                 Excel.XlSaveConflictResolution.xlLocalSessionChanges,                       //object ConflictResolution
+                                Type.Missing,                       //object AddToMru 
+                                Type.Missing,                       //object TextCodepage
+                                Type.Missing,                       //object TextVisualLayout
+                                Type.Missing);
+                        excelappworkbook.Close(false, Type.Missing, Type.Missing);
+                        //excelappworkbooks.Close();
+                        excelapp.Quit();
+                        System.Runtime.InteropServices.Marshal.ReleaseComObject(excelapp);
+                        excelapp = null;
+                        excelappworkbook = null;
+                        excelappworkbooks = null;
+                        System.GC.Collect();
 
-                    excelappworkbook.SaveAs(Data_path.Text + name_file + " ПЭ3.xls",  //object Filename
-                    Excel.XlFileFormat.xlAddIn8,          //object FileFormat
-                            Type.Missing,                       //object Password 
-                            Type.Missing,                       //object WriteResPassword  
-                            Type.Missing,                       //object ReadOnlyRecommended
-                            Type.Missing,                       //object CreateBackup
-                            Excel.XlSaveAsAccessMode.xlNoChange,//XlSaveAsAccessMode AccessMode
-                            Type.Missing,                       //object ConflictResolution
-                            Type.Missing,                       //object AddToMru 
-                            Type.Missing,                       //object TextCodepage
-                            Type.Missing,                       //object TextVisualLayout
-                            Type.Missing);
-                    excelappworkbook.Close(false, Type.Missing, Type.Missing);
-                    //excelappworkbooks.Close();
-                    excelapp.Quit();
-                    System.Runtime.InteropServices.Marshal.ReleaseComObject(excelapp);
-                    excelapp = null;
-                    excelappworkbook = null;
-                    excelappworkbooks = null;
-                    System.GC.Collect();
-
-                    //excelWindow.Close();
-                    
-
-
+                        //excelWindow.Close();
+                   
                 }
                 else
                 {
                     richTextBox1.AppendText( "Каталог " + Data_path.Text + " не найден \n");
                 }
             }
-            catch (Exception)
+            else
             {
                 richTextBox1.AppendText("Нет открытых файлов \n");
+                //richTextBox1.Select(0, "Нет открытых файлов".Length);
+                //richTextBox1.SelectionColor = Color.Red;
             }
             
                        
