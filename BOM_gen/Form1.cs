@@ -18,6 +18,10 @@ namespace BOM_gen
         private Excel.Workbooks excelappworkbooks;
         private Excel.Workbook excelappworkbook;
 
+        private Excel.Range excelcells;
+        private Excel.Sheets excelsheets;
+        private Excel.Worksheet excelworksheet;
+
         private object _missingObj = System.Reflection.Missing.Value;
 
         public static class Data_path
@@ -103,6 +107,14 @@ namespace BOM_gen
                           Type.Missing, Type.Missing);
             excelappworkbook = excelappworkbooks[1];
         }
-       
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            excelsheets = excelappworkbook.Worksheets;
+            excelworksheet = (Excel.Worksheet)excelsheets.get_Item(1);
+            excelcells = excelworksheet.get_Range("A1", Type.Missing);
+            string sStr = Convert.ToString(excelcells.Value2);
+            richTextBox1.AppendText(sStr+" \n");
+        }
     }
 }
