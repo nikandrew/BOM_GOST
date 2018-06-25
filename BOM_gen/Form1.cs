@@ -16,10 +16,12 @@ namespace BOM_gen
     {
         private Excel.Application excelapp;
         private Excel.Window excelWindow;
-        private System.Diagnostics.Process excelProc = System.Diagnostics.Process.GetProcessesByName("EXCEL").Last();
+        //private System.Diagnostics.Process excelProc = System.Diagnostics.Process.GetProcessesByName("EXCEL").Last();
         private Excel.Workbooks excelappworkbooks;
         private Excel.Workbook excelappworkbook;
-        
+
+        private object _missingObj = System.Reflection.Missing.Value;
+
         public static class Data_path
         {
             public static string Text { set; get; }
@@ -79,14 +81,16 @@ namespace BOM_gen
                             Type.Missing,                       //object TextVisualLayout
                             Type.Missing);
                     excelappworkbook.Close(false, Type.Missing, Type.Missing);
-                    excelappworkbooks.Close();
+                    //excelappworkbooks.Close();
                     excelapp.Quit();
-                    //excelapp = null;
-                    //excelProc.Kill();
-                    excelWindow.Close();
-                    Marshal.ReleaseComObject(excelappworkbook);
-                    Marshal.ReleaseComObject(excelappworkbooks);
-                    Marshal.ReleaseComObject(excelapp);
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(excelapp);
+                    excelapp = null;
+                    excelappworkbook = null;
+                    excelappworkbooks = null;
+                    System.GC.Collect();
+
+                    //excelWindow.Close();
+                    
 
 
                 }
