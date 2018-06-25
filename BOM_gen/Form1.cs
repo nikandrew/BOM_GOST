@@ -15,8 +15,6 @@ namespace BOM_gen
     public partial class Form1 : Form
     {
         private Excel.Application excelapp;
-        private Excel.Window excelWindow;
-        //private System.Diagnostics.Process excelProc = System.Diagnostics.Process.GetProcessesByName("EXCEL").Last();
         private Excel.Workbooks excelappworkbooks;
         private Excel.Workbook excelappworkbook;
 
@@ -33,30 +31,8 @@ namespace BOM_gen
                         
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            excelapp = new Excel.Application();
-            excelapp.Visible = true;
-            excelapp.SheetsInNewWorkbook = 3;
-            excelapp.Workbooks.Add(Type.Missing);
-            //Запрашивать сохранение
-            excelapp.DisplayAlerts = true;
-            //Получаем набор ссылок на объекты Workbook (на созданные книги)
-            excelappworkbooks = excelapp.Workbooks;
-            //Получаем ссылку на книгу 1 - нумерация от 1
-            
-            excelappworkbook = excelappworkbooks[1];
-            excelappworkbook.Saved = true;
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
-            //
-            //excelappworkbook.Saved = true;
-            //excelapp.DisplayAlerts = false;
-            //excelapp.DisplayAlerts = true;
-            //excelappworkbooks = excelapp.Workbooks;
-
             if(excelapp != null)
             {
                 
@@ -72,9 +48,8 @@ namespace BOM_gen
                     else
                     {
                         richTextBox1.AppendText("Файл " + Data_path.Text + name_file + " ПЭ3.xls создан и сохранен \n");
-                    }
+                    }                        
                         
-                        //excelapp.DisplayAlerts = false;
                         excelappworkbook.SaveAs(Data_path.Text + name_file + " ПЭ3.xls",  //object Filename
                         Excel.XlFileFormat.xlAddIn8,          //object FileFormat
                                 Type.Missing,                       //object Password 
@@ -88,7 +63,6 @@ namespace BOM_gen
                                 Type.Missing,                       //object TextVisualLayout
                                 Type.Missing);
                         excelappworkbook.Close(false, Type.Missing, Type.Missing);
-                        //excelappworkbooks.Close();
                         excelapp.Quit();
                         System.Runtime.InteropServices.Marshal.ReleaseComObject(excelapp);
                         excelapp = null;
@@ -96,8 +70,7 @@ namespace BOM_gen
                         excelappworkbooks = null;
                         System.GC.Collect();
 
-                        //excelWindow.Close();
-                   
+                        
                 }
                 else
                 {
@@ -106,37 +79,11 @@ namespace BOM_gen
             }
             else
             {
-                richTextBox1.AppendText("Нет открытых файлов \n");
-                //richTextBox1.Select(0, "Нет открытых файлов".Length);
-                //richTextBox1.SelectionColor = Color.Red;
-            }
-            
-                       
-
-              
-            
-
-           
-
+                richTextBox1.AppendText("Нет открытых файлов \n");                
+            }  
         }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-     
-        private void button4_Click_1(object sender, EventArgs e)
-        {
-            excelapp = new Excel.Application();
-            excelapp.Visible = true;
-            excelapp.Workbooks.Open(@"E:\Project\BOM_gen\BOM.xls",
-                          Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                          Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                          Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                          Type.Missing, Type.Missing);
-        }
-
+    
+       
         private void button5_Click(object sender, EventArgs e)
         {
             if (openFileDialog1.ShowDialog() == DialogResult.Cancel)
@@ -155,9 +102,7 @@ namespace BOM_gen
                           Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                           Type.Missing, Type.Missing);
             excelappworkbook = excelappworkbooks[1];
-            //excelWindow = excelapp.Windows;
         }
-
        
     }
 }
