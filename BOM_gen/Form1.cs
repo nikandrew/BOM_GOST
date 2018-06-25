@@ -18,9 +18,17 @@ namespace BOM_gen
         private Excel.Workbooks excelappworkbooks;
         private Excel.Workbook excelappworkbook;
 
+        private Excel.Application excelapp_ref;
+        private Excel.Workbooks excelappworkbooks_ref;
+        private Excel.Workbook excelappworkbook_ref;
+
         private Excel.Range excelcells;
         private Excel.Sheets excelsheets;
         private Excel.Worksheet excelworksheet;
+
+        private Excel.Range excelcells_ref;
+        private Excel.Sheets excelsheets_ref;
+        private Excel.Worksheet excelworksheet_ref;
 
         private object _missingObj = System.Reflection.Missing.Value;
 
@@ -115,6 +123,34 @@ namespace BOM_gen
             excelcells = excelworksheet.get_Range("A1", Type.Missing);
             string sStr = Convert.ToString(excelcells.Value2);
             richTextBox1.AppendText(sStr+" \n");
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //Открытие файла
+            excelapp_ref = new Excel.Application();
+            excelapp_ref.Visible = true;
+            excelappworkbooks_ref = excelapp_ref.Workbooks;
+
+            excelappworkbooks_ref.Open(Application.StartupPath.ToString() + "\\BOM_reference.xlsx",
+                          Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                          Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                          Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                          Type.Missing, Type.Missing);
+            excelappworkbook_ref = excelappworkbooks_ref[1];
+            excelsheets_ref = excelappworkbook_ref.Worksheets;
+            excelworksheet_ref = (Excel.Worksheet)excelsheets_ref.get_Item(1);
+            // Копирование листов
+            excelappworkbook_ref.Worksheets[1].Copy(excelappworkbook.Worksheets[1]);
+
+            //Закрытие файла
+            excelappworkbook_ref.Close(false, Type.Missing, Type.Missing);
+            excelapp_ref.Quit();
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(excelapp_ref);
+            excelapp_ref = null;
+            excelappworkbook_ref = null;
+            excelappworkbooks_ref = null;
+            System.GC.Collect();
         }
     }
 }
