@@ -107,13 +107,13 @@ namespace BOM_gen
             excelapp = new Excel.Application();
             excelapp.Visible = true;
             excelappworkbooks = excelapp.Workbooks;
-            
-            excelappworkbooks.Open(filename,
+
+            excelappworkbook = excelappworkbooks.Open(filename,
                           Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                           Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                           Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                           Type.Missing, Type.Missing);
-            excelappworkbook = excelappworkbooks[1];
+            //excelappworkbook = excelappworkbooks[1];
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -132,25 +132,62 @@ namespace BOM_gen
             excelapp_ref.Visible = true;
             excelappworkbooks_ref = excelapp_ref.Workbooks;
 
-            excelappworkbooks_ref.Open(Application.StartupPath.ToString() + "\\BOM_reference.xlsx",
+            excelappworkbook_ref = excelappworkbooks_ref.Open(Application.StartupPath.ToString() + "\\BOM_reference.xlsx",
                           Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                           Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                           Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                           Type.Missing, Type.Missing);
-            excelappworkbook_ref = excelappworkbooks_ref[1];
+            //excelappworkbook_ref = excelappworkbooks_ref[1];
             excelsheets_ref = excelappworkbook_ref.Worksheets;
             excelworksheet_ref = (Excel.Worksheet)excelsheets_ref.get_Item(1);
+
+            /*Excel.Worksheet newWorksheet;
+            newWorksheet = (Excel.Worksheet)excelsheets_ref.Add(Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+            newWorksheet.Name = "TEst";*/
+
             // Копирование листов
-            excelappworkbook_ref.Worksheets[1].Copy(excelappworkbook.Worksheets[1]);
+            //excelappworkbook_ref.Worksheets[1].Copy(excelappworkbook.Worksheets[1]);
+            int i = 3;
+
+            excelappworkbook_ref.Worksheets[2].Copy(After: excelappworkbook_ref.Worksheets[2]);
+            excelappworkbook_ref.Worksheets[i].Name = i;
+            excelappworkbook_ref.Worksheets[i].Columns[1].ColumnWidth = 0.92;
+            excelappworkbook_ref.Worksheets[i].Columns[2].ColumnWidth = 2;
+            excelappworkbook_ref.Worksheets[i].Columns[3].ColumnWidth = 2;
+            excelappworkbook_ref.Worksheets[i].Columns[4].ColumnWidth = 2.86;
+            excelappworkbook_ref.Worksheets[i].Columns[5].ColumnWidth = 4.43;
+            excelappworkbook_ref.Worksheets[i].Columns[6].ColumnWidth = 0.92;
+            excelappworkbook_ref.Worksheets[i].Columns[7].ColumnWidth = 9.43;
+            excelappworkbook_ref.Worksheets[i].Columns[8].ColumnWidth = 7;
+            excelappworkbook_ref.Worksheets[i].Columns[9].ColumnWidth = 4.43;
+            excelappworkbook_ref.Worksheets[i].Columns[10].ColumnWidth = 32.43;
+            excelappworkbook_ref.Worksheets[i].Columns[11].ColumnWidth = 1.86;
+            excelappworkbook_ref.Worksheets[i].Columns[12].ColumnWidth = 1.86;
+            excelappworkbook_ref.Worksheets[i].Columns[13].ColumnWidth = 1.86;
+            excelappworkbook_ref.Worksheets[i].Columns[14].ColumnWidth = 1.86;
+            excelappworkbook_ref.Worksheets[i].Columns[15].ColumnWidth = 1.86;
+            excelappworkbook_ref.Worksheets[i].Columns[16].ColumnWidth = 1.86;
+            excelappworkbook_ref.Worksheets[i].Columns[17].ColumnWidth = 1.86;
+            excelappworkbook_ref.Worksheets[i].Columns[18].ColumnWidth = 1.86;
+            excelappworkbook_ref.Worksheets[i].Columns[19].ColumnWidth = 1.86;
+            excelappworkbook_ref.Worksheets[i].Columns[20].ColumnWidth = 1.86;
+            excelappworkbook_ref.Worksheets[i].Columns[21].ColumnWidth = 1.86;
+            excelappworkbook_ref.Worksheets[i].Columns[22].ColumnWidth = 1.86;
+            excelappworkbook_ref.Worksheets[i].Columns[23].ColumnWidth = 1.86;
+
+
+
+            //xlApp.Visible = true;
+
 
             //Закрытие файла
-            excelappworkbook_ref.Close(false, Type.Missing, Type.Missing);
+            /*excelappworkbook_ref.Close(false, Type.Missing, Type.Missing);
             excelapp_ref.Quit();
             System.Runtime.InteropServices.Marshal.ReleaseComObject(excelapp_ref);
             excelapp_ref = null;
             excelappworkbook_ref = null;
             excelappworkbooks_ref = null;
-            System.GC.Collect();
+            System.GC.Collect();*/
         }
     }
 }
