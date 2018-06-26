@@ -31,6 +31,14 @@ namespace BOM_gen
         private Excel.Sheets excelsheets_ref;
         private Excel.Worksheet excelworksheet_ref;
 
+        // Заголовки граф
+        private string sDesignator = "Designator";
+        private string sQuantity = "Quantity";
+        private string sValueName = "ValueName";
+        private string sValueType = "ValueType";
+        private string sDeesignItemId = "DeesignItemId";
+        private string sTU = "DeesignItemId";
+
         private object _missingObj = System.Reflection.Missing.Value;
 
         private string ModuleIndex;
@@ -79,9 +87,9 @@ namespace BOM_gen
             excelsheets_fun = excelappworkbook_fun.Worksheets;
             //Добавляем номер новой странице
             excelworksheet_fun = (Excel.Worksheet)excelsheets_fun.get_Item(sheetscount);
-            excelworksheet_fun.get_Range("S67","U68").UnMerge();
+            excelworksheet_fun.get_Range("R75","T76").UnMerge();
             excelworksheet_fun.Cells[67, 19] = sheetscount;
-            excelworksheet_fun.get_Range("S67", "U68").Merge();
+            excelworksheet_fun.get_Range("R75", "T76").Merge();
             //Добавляем номер последней странице
             excelworksheet_fun = (Excel.Worksheet)excelsheets_fun.get_Item(sheetscount+1);
             excelworksheet_fun.get_Range("R65", "R66").UnMerge();
@@ -89,9 +97,9 @@ namespace BOM_gen
             excelworksheet_fun.get_Range("R65", "R66").Merge();
             //Добавляем номер 2 странице
             excelworksheet_fun = (Excel.Worksheet)excelsheets_fun.get_Item(2);
-            excelworksheet_fun.get_Range("S67", "U68").UnMerge();
+            excelworksheet_fun.get_Range("R75", "T76").UnMerge();
             excelworksheet_fun.Cells[67, 19] = 2;
-            excelworksheet_fun.get_Range("S67", "U68").Merge();
+            excelworksheet_fun.get_Range("R75", "T76").Merge();
             //Добавляем номер 1 странице
             excelworksheet_fun = (Excel.Worksheet)excelsheets_fun.get_Item(1);
             excelworksheet_fun.get_Range("O62", "Q62").UnMerge();
@@ -200,11 +208,93 @@ namespace BOM_gen
 
         private void button1_Click(object sender, EventArgs e)
         {
+            int j = 1;
+            int i = 1;
+
             excelsheets = excelappworkbook.Worksheets;
             excelworksheet = (Excel.Worksheet)excelsheets.get_Item(1);
-            excelcells = excelworksheet.get_Range("A1", Type.Missing);
+            excelcells = excelworksheet.Cells[i, j];
             string sStr = Convert.ToString(excelcells.Value2);
             richTextBox1.AppendText(sStr+" \n");
+
+            while (sStr != "")
+            {
+                i = 1;
+                excelcells = excelworksheet.Cells[i, j];
+                sStr = Convert.ToString(excelcells.Value2);
+                switch (sStr)
+                {
+                    case "Designator":
+                        i = 2;
+                        excelcells = excelworksheet.Cells[i, j];
+                        sStr = Convert.ToString(excelcells.Value2);
+                        while (Convert.ToString(excelworksheet.Cells[i, j]).Length <2 )
+                        {
+                            excelworksheet.Cells[i, 10] = excelworksheet.Cells[i, j];
+                            i++;
+                            richTextBox1.AppendText(excelworksheet.Cells[i, j].Value + " \n");
+                        }
+                        break;
+                    case "Quantity":
+                        i = 2;
+                        excelcells = excelworksheet.Cells[i, j];
+                        sStr = Convert.ToString(excelcells.Value2);
+                        while (sStr != null)
+                        {
+                            excelworksheet.Cells[i, 14] = excelworksheet.Cells[i, j];
+                            i++;
+                        }
+                        break;
+                    case "ValueName":
+                        i = 2;
+                        excelcells = excelworksheet.Cells[i, j];
+                        sStr = Convert.ToString(excelcells.Value2);
+                        while (sStr != null)
+                        {
+                            excelworksheet.Cells[i, 12] = excelworksheet.Cells[i, j];
+                            i++;
+                        }
+                        break;
+                    case "ValueType":
+                        i = 2;
+                        excelcells = excelworksheet.Cells[i, j];
+                        sStr = Convert.ToString(excelcells.Value2);
+                        while (sStr != null)
+                        {
+                            excelworksheet.Cells[i, 11] = excelworksheet.Cells[i, j];
+                            i++;
+                        }
+                        break;
+                    case "DesignItemId":
+                        i = 2;
+                        excelcells = excelworksheet.Cells[i, j];
+                        sStr = Convert.ToString(excelcells.Value2);
+                        while (sStr != null)
+                        {
+                            excelworksheet.Cells[i, 15] = excelworksheet.Cells[i, j];
+                            i++;
+                        }
+                        break;
+                    case "ValueTechReq":
+                        i = 2;
+                        excelcells = excelworksheet.Cells[i, j];
+                        sStr = Convert.ToString(excelcells.Value2);
+                        while (sStr != null)
+                        {
+                            excelworksheet.Cells[i, 13] = excelworksheet.Cells[i, j];
+                            i++;
+                        }
+                        break;
+                    default:
+
+                        break;
+                }
+                j++;
+                excelcells = excelworksheet.Cells[i, j];
+                sStr = Convert.ToString(excelcells.Value2);
+                richTextBox1.AppendText(sStr + " \n");
+            }
+            
         }
 
         private void button3_Click(object sender, EventArgs e)
