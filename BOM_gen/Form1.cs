@@ -210,29 +210,37 @@ namespace BOM_gen
         {
             int j = 1;
             int i = 1;
-
+            int max_poz = 0;
+            string sStr;
+            
             excelsheets = excelappworkbook.Worksheets;
             excelworksheet = (Excel.Worksheet)excelsheets.get_Item(1);
             excelcells = excelworksheet.Cells[i, j];
-            string sStr = Convert.ToString(excelcells.Value2);
+            sStr = Convert.ToString(excelcells.Value2);
             richTextBox1.AppendText(sStr+" \n");
 
-            while (sStr != "")
+            while (sStr != null)
             {
-                i = 1;
+               // i = 1;
+                excelsheets = excelappworkbook.Worksheets;
+                excelworksheet = (Excel.Worksheet)excelsheets.get_Item(1);
                 excelcells = excelworksheet.Cells[i, j];
                 sStr = Convert.ToString(excelcells.Value2);
+                richTextBox1.AppendText(sStr + " \n");
                 switch (sStr)
                 {
                     case "Designator":
                         i = 2;
                         excelcells = excelworksheet.Cells[i, j];
                         sStr = Convert.ToString(excelcells.Value2);
-                        while (Convert.ToString(excelworksheet.Cells[i, j]).Length <2 )
+                        while (sStr != null )
                         {
-                            excelworksheet.Cells[i, 10] = excelworksheet.Cells[i, j];
-                            i++;
+                            max_poz++;
+                            excelworksheet.Cells[i, 10] = excelworksheet.Cells[i, j];                            
                             richTextBox1.AppendText(excelworksheet.Cells[i, j].Value + " \n");
+                            i++;
+                            excelcells = excelworksheet.Cells[i, j];
+                            sStr = Convert.ToString(excelcells.Value2);
                         }
                         break;
                     case "Quantity":
@@ -242,7 +250,10 @@ namespace BOM_gen
                         while (sStr != null)
                         {
                             excelworksheet.Cells[i, 14] = excelworksheet.Cells[i, j];
+                            richTextBox1.AppendText(excelworksheet.Cells[i, j].Value + " \n");
                             i++;
+                            excelcells = excelworksheet.Cells[i, j];
+                            sStr = Convert.ToString(excelcells.Value2);
                         }
                         break;
                     case "ValueName":
@@ -252,7 +263,10 @@ namespace BOM_gen
                         while (sStr != null)
                         {
                             excelworksheet.Cells[i, 12] = excelworksheet.Cells[i, j];
+                            richTextBox1.AppendText(excelworksheet.Cells[i, j].Value + " \n");
                             i++;
+                            excelcells = excelworksheet.Cells[i, j];
+                            sStr = Convert.ToString(excelcells.Value2);
                         }
                         break;
                     case "ValueType":
@@ -262,7 +276,10 @@ namespace BOM_gen
                         while (sStr != null)
                         {
                             excelworksheet.Cells[i, 11] = excelworksheet.Cells[i, j];
+                            richTextBox1.AppendText(excelworksheet.Cells[i, j].Value + " \n");
                             i++;
+                            excelcells = excelworksheet.Cells[i, j];
+                            sStr = Convert.ToString(excelcells.Value2);
                         }
                         break;
                     case "DesignItemId":
@@ -272,7 +289,10 @@ namespace BOM_gen
                         while (sStr != null)
                         {
                             excelworksheet.Cells[i, 15] = excelworksheet.Cells[i, j];
+                            richTextBox1.AppendText(excelworksheet.Cells[i, j].Value + " \n");
                             i++;
+                            excelcells = excelworksheet.Cells[i, j];
+                            sStr = Convert.ToString(excelcells.Value2);
                         }
                         break;
                     case "ValueTechReq":
@@ -282,7 +302,10 @@ namespace BOM_gen
                         while (sStr != null)
                         {
                             excelworksheet.Cells[i, 13] = excelworksheet.Cells[i, j];
+                            richTextBox1.AppendText(excelworksheet.Cells[i, j].Value + " \n");
                             i++;
+                            excelcells = excelworksheet.Cells[i, j];
+                            sStr = Convert.ToString(excelcells.Value2);
                         }
                         break;
                     default:
@@ -290,11 +313,22 @@ namespace BOM_gen
                         break;
                 }
                 j++;
+                i = 1;
                 excelcells = excelworksheet.Cells[i, j];
                 sStr = Convert.ToString(excelcells.Value2);
-                richTextBox1.AppendText(sStr + " \n");
             }
-            
+            richTextBox1.AppendText("Кол. элементов = "+max_poz + " \n");
+            // Формируем поля
+            for (int t = 1; t <= max_poz; t++)
+            {
+                excelworksheet.Cells[t, 24] = excelworksheet.Cells[t, 10];
+                excelworksheet.Cells[t, 22] = excelworksheet.Cells[t, 13];
+                excelworksheet.Cells[t, 23] = excelworksheet.Cells[t, 14];
+                string elName = Convert.ToString(excelworksheet.Cells[t, 11].Value2);
+                string elType = Convert.ToString(excelworksheet.Cells[t, 12].Value2);
+                excelworksheet.Cells[t, 21] = elName + " " + elType;
+            }
+
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -370,6 +404,119 @@ namespace BOM_gen
         {
             Add_New_Sheet_type2(excelappworkbook_ref);
 
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            string Test_str = "C1, C20, C21, C52";
+            string Test_str_DA = "R1, R20, R21, R52, R53, R54, R55, R90, R91, R92, R93, R94, R95, R96, R97, R98, R99, R100, R101, R102, R103, R104, R105, R107, R108, R109, R110, R111, R112, R113";
+            string LabelGost = null;
+            string[] NumberGost = new string[500];
+            string[] NumberGostNew = new string[500];
+            int[] NumberGostInt = new int[500]; // массив номеров элементов
+            string resultGost = null;
+
+
+            string[] words = Test_str_DA.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+
+            for (int i = 0; i <= words.Length - 1; i++)
+            {
+                richTextBox1.AppendText(words[i] + " \n");
+            }
+
+            for (int r = 0; r <= words.Length - 1; r++)
+            {
+                LabelGost = null;
+
+                char[] OneWord = words[r].ToCharArray();
+
+                for (int j = 0; j <= OneWord.Length - 1; j++)
+                {
+                    if (char.IsLetter(OneWord[j]))
+                    {
+                        LabelGost = LabelGost + OneWord[j];
+                    }
+                    else
+                    {
+                        if (char.IsDigit(OneWord[j]))
+                        {
+                            NumberGost[r] = NumberGost[r] + OneWord[j];
+                        }
+                    }
+
+                    richTextBox1.AppendText(OneWord[j] + " \n");
+                }
+                NumberGostInt[r] = Convert.ToInt32(NumberGost[r]);
+                richTextBox1.AppendText(LabelGost + " \n");
+                richTextBox1.AppendText("Элемент [" + r + "] = " + NumberGostInt[r] + " \n");
+            }
+            //NumberGostNew[0] = LabelGost + NumberGostInt[0];
+
+            int startGost = 1;
+            int temp = 0;
+            for (int r = 1; r <= words.Length - 1; r++)
+            {
+                
+                if (NumberGostInt[r] - NumberGostInt[r - 1] == 1)
+                {
+                    startGost++;
+                    //richTextBox1.AppendText("startGost++ \n");
+                }
+                else
+                {
+                    if (startGost == 1)
+                    {
+                        startGost = 1;
+                        NumberGostNew[temp] = LabelGost + NumberGostInt[r - 1] + ",";
+                        //richTextBox1.AppendText("Вывод "+ NumberGostNew[temp] + " \n");
+                        temp++;
+                    }
+                    else
+                    {
+                        if (startGost == 2)
+                        {
+                            NumberGostNew[temp] = LabelGost + NumberGostInt[r - 2] +","+ LabelGost + NumberGostInt[r - 1] + ",";
+                            //richTextBox1.AppendText("Вывод " + NumberGostNew[temp] + " \n");
+                            startGost = 1;
+                            temp++;
+                        }
+                        else
+                        {
+                            
+                            NumberGostNew[temp] = LabelGost + NumberGostInt[r - startGost + 1] + "-" + LabelGost + NumberGostInt[r-1] + ",";
+                            //richTextBox1.AppendText("Вывод " + NumberGostNew[temp] + " \n");
+                            startGost = 1;
+                            temp++;
+                        }
+                    }
+                }
+                //richTextBox1.AppendText("r=" + r + ", DA=" + NumberGostInt[r] + " \n");
+                //richTextBox1.AppendText(" startGost = " + startGost + " \n");
+            }
+            if(startGost == 1)
+            {
+                NumberGostNew[temp] = LabelGost + NumberGostInt[words.Length - 1] ;
+            }
+            else
+            {
+                if(startGost == 2)
+                {
+                    NumberGostNew[temp] = LabelGost + NumberGostInt[words.Length - 1] + "," + LabelGost + NumberGostInt[words.Length] ;
+                }
+                else
+                {
+                    NumberGostNew[temp] = LabelGost + NumberGostInt[words.Length - startGost] + "-" + LabelGost + NumberGostInt[words.Length-1] ;
+                }
+            }
+            for (int r = 0; r <= NumberGostNew.Length - 1; r++)
+            {
+                richTextBox1.AppendText(NumberGostNew[r] + " \n");
+            }
+
+            // Формируем окончательный вид
+            {
+
+            }
         }
     }
 }
