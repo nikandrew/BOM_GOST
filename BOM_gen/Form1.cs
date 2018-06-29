@@ -414,7 +414,9 @@ namespace BOM_gen
             string[] NumberGost = new string[500];
             string[] NumberGostNew = new string[500];
             int[] NumberGostInt = new int[500]; // массив номеров элементов
-            string resultGost = null;
+            int[] NumberSim = new int[500];     // Число символов в строках
+            string[] resultGost = new string[500];
+            //char[] chartest = new char[500];
 
 
             string[] words = Test_str_DA.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
@@ -468,6 +470,7 @@ namespace BOM_gen
                     {
                         startGost = 1;
                         NumberGostNew[temp] = LabelGost + NumberGostInt[r - 1] + ",";
+                        NumberSim[temp] = (int)Math.Log10(NumberGostInt[r - 1]) + LabelGost.Length;
                         //richTextBox1.AppendText("Вывод "+ NumberGostNew[temp] + " \n");
                         temp++;
                     }
@@ -475,15 +478,24 @@ namespace BOM_gen
                     {
                         if (startGost == 2)
                         {
-                            NumberGostNew[temp] = LabelGost + NumberGostInt[r - 2] +","+ LabelGost + NumberGostInt[r - 1] + ",";
+                            NumberGostNew[temp] = LabelGost + NumberGostInt[r - 2] + ",";
+                            NumberSim[temp] = (int)Math.Log10(NumberGostInt[r - 2]) + LabelGost.Length;
+
+                            temp++;
+                            NumberGostNew[temp] = LabelGost + NumberGostInt[r - 1] + ",";
+                            NumberSim[temp] = (int)Math.Log10(NumberGostInt[r - 1]) + LabelGost.Length;
                             //richTextBox1.AppendText("Вывод " + NumberGostNew[temp] + " \n");
                             startGost = 1;
                             temp++;
                         }
                         else
                         {
-                            
-                            NumberGostNew[temp] = LabelGost + NumberGostInt[r - startGost + 1] + "-" + LabelGost + NumberGostInt[r-1] + ",";
+
+                            NumberGostNew[temp] = LabelGost + NumberGostInt[r - startGost + 1] + "-";
+                            NumberSim[temp] = (int)Math.Log10(NumberGostInt[r +1]) + LabelGost.Length;
+                            temp++;
+                            NumberGostNew[temp] = LabelGost + NumberGostInt[r-1] + ",";
+                            NumberSim[temp] = (int)Math.Log10(NumberGostInt[r - 1]) + LabelGost.Length;
                             //richTextBox1.AppendText("Вывод " + NumberGostNew[temp] + " \n");
                             startGost = 1;
                             temp++;
@@ -496,27 +508,44 @@ namespace BOM_gen
             if(startGost == 1)
             {
                 NumberGostNew[temp] = LabelGost + NumberGostInt[words.Length - 1] ;
+                NumberSim[temp] = NumberGostInt[words.Length - 1].ToString().Length + LabelGost.Length;
             }
             else
             {
                 if(startGost == 2)
                 {
-                    NumberGostNew[temp] = LabelGost + NumberGostInt[words.Length - 1] + "," + LabelGost + NumberGostInt[words.Length] ;
+                    NumberGostNew[temp] = LabelGost + NumberGostInt[words.Length - 1] + ",";
+                    NumberSim[temp] = NumberGostInt[words.Length - 1].ToString().Length + LabelGost.Length;
+                    temp++;
+                    NumberGostNew[temp] = LabelGost + NumberGostInt[words.Length] ;
+                    NumberSim[temp] = NumberGostInt[words.Length].ToString().Length + LabelGost.Length;
                 }
                 else
                 {
-                    NumberGostNew[temp] = LabelGost + NumberGostInt[words.Length - startGost] + "-" + LabelGost + NumberGostInt[words.Length-1] ;
+                    NumberGostNew[temp] = LabelGost + NumberGostInt[words.Length - startGost] + "-";
+                    NumberSim[temp] = NumberGostInt[words.Length - startGost].ToString().Length + LabelGost.Length;
+                    temp++;
+                    NumberGostNew[temp] = LabelGost + NumberGostInt[words.Length-1] ;
+                    NumberSim[temp] = NumberGostInt[words.Length - startGost].ToString().Length + LabelGost.Length;
                 }
             }
-            for (int r = 0; r <= NumberGostNew.Length - 1; r++)
+            for (int r = 0; r <= temp; r++)
             {
-                richTextBox1.AppendText(NumberGostNew[r] + " \n");
+                //string teststr = Convert.ToString(NumberGostNew[r]);
+                //int tempst = teststr[0].GetLength(0);
+                richTextBox1.AppendText(NumberGostNew[r] + "    ------- "+ NumberSim[temp] +  " \n");
+                richTextBox1.AppendText(LabelGost + LabelGost.Length+ NumberGostInt[temp]+" \n");
             }
 
             // Формируем окончательный вид
+           /* resultGost[0] = NumberGostNew[0];
+            for (int hh = 1; hh <= NumberGostNew.Length; hh++)
             {
+                string teststr = Convert.ToString(NumberGostNew[hh]);
+                char[] chartest = teststr.ToCharArray();
+                richTextBox1.AppendText(chartest.Length + " \n");
 
-            }
+            }*/
         }
     }
 }
