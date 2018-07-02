@@ -416,6 +416,7 @@ namespace BOM_gen
             int[] NumberGostInt = new int[500]; // массив номеров элементов
             int[] NumberSim = new int[500];     // Число символов в строках
             string[] resultGost = new string[500];
+            string[] OutputNumber = new string[500];
             //char[] chartest = new char[500];
 
 
@@ -538,14 +539,34 @@ namespace BOM_gen
             }
 
             // Формируем окончательный вид
-           /* resultGost[0] = NumberGostNew[0];
-            for (int hh = 1; hh <= NumberGostNew.Length; hh++)
+            string tempSumm = "";
+            int tempOut = 0;
+            for (int hh = 0; hh <= temp; hh++)
             {
-                string teststr = Convert.ToString(NumberGostNew[hh]);
-                char[] chartest = teststr.ToCharArray();
-                richTextBox1.AppendText(chartest.Length + " \n");
+                if((tempSumm.Length + NumberSim[hh]) <= 8)
+                {
+                    tempSumm = tempSumm + NumberGostNew[hh];
+                    if( hh == temp)
+                    {
+                        OutputNumber[tempOut] = tempSumm;
+                    }
+                }
+                else
+                {
+                    OutputNumber[tempOut] = tempSumm;
+                    tempSumm = NumberGostNew[hh];
+                    tempOut++;
+                    if (hh == temp)
+                    {
+                        OutputNumber[tempOut] = tempSumm;
+                    }
+                }
 
-            }*/
+            }
+            for (int r = 0; r <= tempOut; r++)
+            {
+                richTextBox1.AppendText(OutputNumber[r] + " \n");
+            }
         }
     }
 }
