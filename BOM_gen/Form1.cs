@@ -68,15 +68,15 @@ namespace BOM_gen
             excelappworkbook_fun.Worksheets[sheetscount].Columns[1].ColumnWidth = 0.92;
             excelappworkbook_fun.Worksheets[sheetscount].Columns[2].ColumnWidth = 2;
             excelappworkbook_fun.Worksheets[sheetscount].Columns[3].ColumnWidth = 2;
-            excelappworkbook_fun.Worksheets[sheetscount].Columns[4].ColumnWidth = 2.86;
+            excelappworkbook_fun.Worksheets[sheetscount].Columns[4].ColumnWidth = 3.29;
             excelappworkbook_fun.Worksheets[sheetscount].Columns[5].ColumnWidth = 4.43;
             excelappworkbook_fun.Worksheets[sheetscount].Columns[6].ColumnWidth = 0.92;
             excelappworkbook_fun.Worksheets[sheetscount].Columns[7].ColumnWidth = 9.43;
-            excelappworkbook_fun.Worksheets[sheetscount].Columns[8].ColumnWidth = 7;
+            excelappworkbook_fun.Worksheets[sheetscount].Columns[8].ColumnWidth = 6;
             excelappworkbook_fun.Worksheets[sheetscount].Columns[9].ColumnWidth = 4.43;
             excelappworkbook_fun.Worksheets[sheetscount].Columns[10].ColumnWidth = 32.43;
             excelappworkbook_fun.Worksheets[sheetscount].Columns[11].ColumnWidth = 1.86;
-            excelappworkbook_fun.Worksheets[sheetscount].Columns[12].ColumnWidth = 1.86;
+            excelappworkbook_fun.Worksheets[sheetscount].Columns[12].ColumnWidth = 2.43;
             excelappworkbook_fun.Worksheets[sheetscount].Columns[13].ColumnWidth = 1.86;
             excelappworkbook_fun.Worksheets[sheetscount].Columns[14].ColumnWidth = 1.86;
             excelappworkbook_fun.Worksheets[sheetscount].Columns[15].ColumnWidth = 1.86;
@@ -89,6 +89,14 @@ namespace BOM_gen
             excelappworkbook_fun.Worksheets[sheetscount].Columns[22].ColumnWidth = 1.86;
             excelappworkbook_fun.Worksheets[sheetscount].Columns[23].ColumnWidth = 1.86;
             excelsheets_fun = excelappworkbook_fun.Worksheets;
+            excelworksheet_fun = (Excel.Worksheet)excelsheets_fun.get_Item(sheetscount);
+            for (int i = 2; i<= 73; i++)
+            {
+                for(int j = 4; j<= 17; j++)
+                {
+                    excelworksheet_fun.Cells[i, j] = null;
+                }
+            }
             //Добавляем номер новой странице
             excelworksheet_fun = (Excel.Worksheet)excelsheets_fun.get_Item(sheetscount);
             excelworksheet_fun.get_Range("R75","T76").UnMerge();
@@ -553,13 +561,15 @@ namespace BOM_gen
                         i = 2;
                         excelcells = excelworksheet.Cells[i, j];
                         sStr = Convert.ToString(excelcells.Value2);
-                        while (sStr != null)
+                        int y = 1;
+                        while (y <= max_poz)
                         {
                             excelworksheet.Cells[i, 12] = excelworksheet.Cells[i, j];
                             //richTextBox1.AppendText(excelworksheet.Cells[i, j].Value + " \n");
                             i++;
                             excelcells = excelworksheet.Cells[i, j];
                             sStr = Convert.ToString(excelcells.Value2);
+                            y++;
                         }
                         break;
                     case "ValueType":
@@ -626,7 +636,7 @@ namespace BOM_gen
                 }
                 else
                 {
-                    if (number_string <= (18 + (24 * (number_sheet - 1) - 1)))
+                    if (number_string <= (17 + (24 * (number_sheet - 1) - 1)))
                     {
                         number_sheet = number_sheet;
                         saveNumberString = number_string - (18 + 24 * (number_sheet - 2));
@@ -635,7 +645,7 @@ namespace BOM_gen
                     else
                     {
                         number_sheet++;
-                        saveNumberString = 1;
+                        saveNumberString = 0;
                         if(number_sheet >= 3)
                         {
                             Add_New_Sheet_type2(excelappworkbook_ref);
@@ -742,7 +752,14 @@ namespace BOM_gen
                         }
                     }
                 }
-                
+
+                if (exstr != null)
+                {
+                    if (DesignatorFormNumber(exstr) <= 0)
+                    {
+                        number_string++;
+                    }
+                }
                 number_string++;
 
             }
