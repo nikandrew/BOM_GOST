@@ -31,6 +31,10 @@ namespace BOM_gen
         private Excel.Sheets excelsheets_ref;
         private Excel.Worksheet excelworksheet_ref;
 
+
+        Excel.Sheets excelsheets_fin;
+        Excel.Worksheet excelworksheet_fin;
+
         // Заголовки граф
         private string sDesignator = "Designator";
         private string sQuantity = "Quantity";
@@ -518,7 +522,7 @@ namespace BOM_gen
                             i++;
                             excelcells = excelworksheet.Cells[i, j];
                             sStr = Convert.ToString(excelcells.Value2);
-                            richTextBox1.AppendText("sStr = " + sStr + " \n");
+                            /*richTextBox1.AppendText("sStr = " + sStr + " \n");
                             //int fsdf = DesignatorFormNumber(sStr);
                             if (sStr != null)
                             {
@@ -528,7 +532,7 @@ namespace BOM_gen
                                 {
                                     richTextBox1.AppendText(tempsStr[r] + " \n");
                                 }
-                            }
+                            }*/
 
                         }
                         break;
@@ -606,17 +610,144 @@ namespace BOM_gen
                 excelcells = excelworksheet.Cells[i, j];
                 sStr = Convert.ToString(excelcells.Value2);
             }
-            richTextBox1.AppendText("Кол. элементов = "+max_poz + " \n");
-            // Формируем поля
-            for (int t = 1; t <= max_poz; t++)
+            int number_string = 0;
+            int number_sheet = 1;
+            // Записываем значения в таблицу по ГОСТ
+            
+            excelsheets_fin = excelappworkbook_ref.Worksheets;
+            int saveNumberString = 0;
+            for (int tempi = 2; tempi <= max_poz; tempi++)
             {
-                excelworksheet.Cells[t, 24] = excelworksheet.Cells[t, 10];
-                excelworksheet.Cells[t, 22] = excelworksheet.Cells[t, 13];
-                excelworksheet.Cells[t, 23] = excelworksheet.Cells[t, 14];
-                string elName = Convert.ToString(excelworksheet.Cells[t, 11].Value2);
-                string elType = Convert.ToString(excelworksheet.Cells[t, 12].Value2);
-                excelworksheet.Cells[t, 21] = elName + " " + elType;
+                if (number_string <= 17)
+                {
+                    number_sheet = 1;
+                    saveNumberString = number_string;
+                    richTextBox1.AppendText("saveNumberString = " + saveNumberString + " \n");
+                }
+                else
+                {
+                    if (number_string <= (18 + (24 * (number_sheet - 1) - 1)))
+                    {
+                        number_sheet = number_sheet;
+                        saveNumberString = number_string - (18 + 24 * (number_sheet - 2));
+                        richTextBox1.AppendText("saveNumberString = " + saveNumberString + " \n");
+                    }
+                    else
+                    {
+                        number_sheet++;
+                        saveNumberString = 1;
+                        if(number_sheet >= 3)
+                        {
+                            Add_New_Sheet_type2(excelappworkbook_ref);
+                        }
+                    }
+                }
+
+                 
+                excelworksheet_fin = (Excel.Worksheet)excelsheets_fin.get_Item(number_sheet);
+                
+                //Вписываем наименование
+                excelcells = excelworksheet.Cells[tempi, 11];
+                string elType = Convert.ToString(excelcells.Value2);
+                excelcells = excelworksheet.Cells[tempi, 12];
+                string elName = Convert.ToString(excelcells.Value2);
+                if (elName != null)
+                {
+                    excelcells = excelworksheet.Cells[tempi, 12];
+                    elName = Convert.ToString(excelcells.Value2);
+                }
+                else
+                {
+                    excelcells = excelworksheet.Cells[tempi, 15];
+                    elName = Convert.ToString(excelcells.Value2);
+                }
+                excelworksheet_fin.Range[excelworksheet_fin.Cells[(3 * saveNumberString + 2), 7], excelworksheet_fin.Cells[(3 * saveNumberString + 4), 10]].UnMerge();
+                excelworksheet_fin.Cells[(3 * saveNumberString + 2), 7] = elType + " " + elName;
+                excelworksheet_fin.Range[excelworksheet_fin.Cells[(3 * saveNumberString + 2), 7], excelworksheet_fin.Cells[(3 * saveNumberString + 4), 10]].Merge();
+                
+                //Вписываем ТУ
+                excelcells = excelworksheet.Cells[tempi, 13];
+                string elTech = Convert.ToString(excelcells.Value2);              
+                excelworksheet_fin.Range[excelworksheet_fin.Cells[(3 * (saveNumberString + 1) + 2), 7], excelworksheet_fin.Cells[(3 * (saveNumberString + 1) + 4), 10]].UnMerge();
+                excelworksheet_fin.Cells[(3 * (saveNumberString + 1) + 2), 7] = elTech;
+                excelworksheet_fin.Range[excelworksheet_fin.Cells[(3 * (saveNumberString + 1) + 2), 7], excelworksheet_fin.Cells[(3 * (saveNumberString + 1) + 4), 10]].Merge();
+                
+                //Вписываем кол-во элементов
+                excelcells = excelworksheet.Cells[tempi, 14];
+                string elQuantity = Convert.ToString(excelcells.Value2);
+                excelworksheet_fin.Range[excelworksheet_fin.Cells[(3 * saveNumberString + 2), 11], excelworksheet_fin.Cells[(3 * saveNumberString + 4), 12]].UnMerge();
+                excelworksheet_fin.Cells[(3 * saveNumberString + 2), 11] = elQuantity;
+                excelworksheet_fin.Range[excelworksheet_fin.Cells[(3 * saveNumberString + 2), 11], excelworksheet_fin.Cells[(3 * saveNumberString + 4), 12]].Merge();
+                
+                //Вписываем позиционные обозначения
+                excelcells = excelworksheet.Cells[tempi, 10];
+                string exstr = Convert.ToString(excelcells.Value2);
+                int tempsStrNum = 0;
+                if (exstr != null)
+                {
+                    tempsStr = DesignatorForm(exstr);
+                    tempsStrNum = DesignatorFormNumber(exstr);
+
+                }                
+                int time = 0;
+                while(time <= tempsStrNum)
+                {
+                    if(number_sheet == 1)
+                    {
+                        if(number_string <= 17)
+                        {
+                            excelworksheet_fin = (Excel.Worksheet)excelsheets_fin.get_Item(number_sheet);
+                            excelworksheet_fin.Range[excelworksheet_fin.Cells[(3 * number_string + 2), 4], excelworksheet_fin.Cells[(3 * number_string + 4), 6]].UnMerge();
+                            excelworksheet_fin.Cells[(3 * number_string + 2), 4] = tempsStr[time];
+                            excelworksheet_fin.Range[excelworksheet_fin.Cells[(3 * number_string + 2), 4], excelworksheet_fin.Cells[(3 * number_string + 4), 6]].Merge();                            
+                            time++;
+                            number_string++;
+                        }
+                        else
+                        {
+                            number_sheet++;
+                            excelworksheet_fin = (Excel.Worksheet)excelsheets_fin.get_Item(number_sheet);
+                            excelworksheet_fin.Range[excelworksheet_fin.Cells[(3 * (number_string-18) + 2), 4], excelworksheet_fin.Cells[(3 * (number_string - 18) + 4), 6]].UnMerge();
+                            excelworksheet_fin.Cells[(3 * (number_string - 18) + 2), 4] = tempsStr[time];
+                            excelworksheet_fin.Range[excelworksheet_fin.Cells[(3 * (number_string-18) + 2), 4], excelworksheet_fin.Cells[(3 * (number_string - 18) + 4), 6]].Merge();
+                            time++;
+                            number_string++;
+                        }
+                    } 
+                    else
+                    {
+                        if(number_string <= 18 + (number_sheet-1)*24 )
+                        {
+                            excelworksheet_fin = (Excel.Worksheet)excelsheets_fin.get_Item(number_sheet);
+                            excelworksheet_fin.Range[excelworksheet_fin.Cells[(3 * (number_string - (18 + 24 * (number_sheet - 2))) + 2) , 4], excelworksheet_fin.Cells[(3 * (number_string - (18 + 24 * (number_sheet - 2))) + 4), 6]].UnMerge();
+                            excelworksheet_fin.Cells[(3 * (number_string - (18 + 24 * (number_sheet - 2))) + 2) , 4] = tempsStr[time];
+                            excelworksheet_fin.Range[excelworksheet_fin.Cells[(3 * (number_string - (18 + 24 * (number_sheet - 2))) + 2), 4], excelworksheet_fin.Cells[(3 * (number_string - (18 + 24 * (number_sheet - 2))) + 4), 6]].Merge();
+                            time++;
+                            number_string++;
+                        }
+                        else
+                        {
+                            number_sheet++;
+                            if (number_sheet >= 3)
+                            {
+                                Add_New_Sheet_type2(excelappworkbook_ref);
+                            }
+                            excelworksheet_fin = (Excel.Worksheet)excelsheets_fin.get_Item(number_sheet);
+                            excelworksheet_fin.Range[excelworksheet_fin.Cells[(3 * (number_string - (18 + 24 * (number_sheet - 2))) + 2), 4], excelworksheet_fin.Cells[(3 * (number_string - (18 + 24 * (number_sheet - 2))) + 4) , 6]].UnMerge();
+                            excelworksheet_fin.Cells[(3 * (number_string - (18 + 24 * (number_sheet - 2))) + 2) , 4] = tempsStr[time];
+                            excelworksheet_fin.Range[excelworksheet_fin.Cells[(3 * (number_string - (18 + 24 * (number_sheet - 2))) + 2), 4], excelworksheet_fin.Cells[(3 * (number_string - (18 + 24 * (number_sheet - 2))) + 4), 6]].Merge();
+                            time++;
+                            number_string++;
+
+                        }
+                    }
+                }
+                
+                number_string++;
+
             }
+            richTextBox1.AppendText("Кол. элементов = "+max_poz + " \n");
+            
 
         }
 
