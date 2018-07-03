@@ -57,7 +57,7 @@ namespace BOM_gen
                         
         }
 
-        public static void Add_New_Sheet_type2( Excel.Workbook excelappworkbook_fun)
+        public static void Add_New_Sheet_type2( Excel.Workbook excelappworkbook_fun, string indexIzd)
         {
             Excel.Sheets excelsheets_fun;
             Excel.Worksheet excelworksheet_fun;
@@ -122,6 +122,27 @@ namespace BOM_gen
             excelworksheet_fun.get_Range("R62", "U62").UnMerge();
             excelworksheet_fun.Cells[62, 18] = sheetscount + 1;
             excelworksheet_fun.get_Range("R62", "U62").Merge();
+
+            //Добавляем индексы на все листы
+            excelworksheet_fun = (Excel.Worksheet)excelsheets_fun.get_Item(1);
+            excelworksheet_fun.Range[excelworksheet_fun.Cells[58, 10], excelworksheet_fun.Cells[60, 21]].UnMerge();
+            excelworksheet_fun.Cells[58, 10] = indexIzd + " ПЭ3";
+            excelworksheet_fun.Range[excelworksheet_fun.Cells[58, 10], excelworksheet_fun.Cells[60, 21]].Merge();
+
+            excelworksheet_fun = (Excel.Worksheet)excelsheets_fun.get_Item(2);
+            excelworksheet_fun.Range[excelworksheet_fun.Cells[74, 10], excelworksheet_fun.Cells[76, 17]].UnMerge();
+            excelworksheet_fun.Cells[74, 10] = indexIzd + " ПЭ3";
+            excelworksheet_fun.Range[excelworksheet_fun.Cells[74, 10], excelworksheet_fun.Cells[76, 17]].Merge();
+
+            excelworksheet_fun = (Excel.Worksheet)excelsheets_fun.get_Item(sheetscount);
+            excelworksheet_fun.Range[excelworksheet_fun.Cells[74, 10], excelworksheet_fun.Cells[76, 17]].UnMerge();
+            excelworksheet_fun.Cells[74, 10] = indexIzd + " ПЭ3";
+            excelworksheet_fun.Range[excelworksheet_fun.Cells[74, 10], excelworksheet_fun.Cells[76, 17]].Merge();
+
+            excelworksheet_fun = (Excel.Worksheet)excelsheets_fun.get_Item(sheetscount + 1);
+            excelworksheet_fun.Range[excelworksheet_fun.Cells[64, 13], excelworksheet_fun.Cells[66, 17]].UnMerge();
+            excelworksheet_fun.Cells[64, 13] = indexIzd + " ПЭ3";
+            excelworksheet_fun.Range[excelworksheet_fun.Cells[64, 13], excelworksheet_fun.Cells[66, 17]].Merge();
         }
 
 
@@ -507,6 +528,7 @@ namespace BOM_gen
             sStr = Convert.ToString(excelcells.Value2);
            // richTextBox1.AppendText(sStr+" \n");
 
+
             while (sStr != null)
             {
                // i = 1;
@@ -625,6 +647,25 @@ namespace BOM_gen
             // Записываем значения в таблицу по ГОСТ
             
             excelsheets_fin = excelappworkbook_ref.Worksheets;
+            excelworksheet_fin = (Excel.Worksheet)excelsheets_fin.get_Item(1);
+            
+            // Название прибора 
+            excelworksheet_fin.Range[excelworksheet_fin.Cells[61, 10], excelworksheet_fin.Cells[63, 11]].UnMerge();
+            excelworksheet_fin.Cells[61, 10] = textBox1.Text;
+            excelworksheet_fin.Range[excelworksheet_fin.Cells[61, 10], excelworksheet_fin.Cells[63, 11]].Merge();
+            // Разработчик
+            excelworksheet_fin.Range[excelworksheet_fin.Cells[61, 6], excelworksheet_fin.Cells[61, 7]].UnMerge();
+            excelworksheet_fin.Cells[61, 6] = textBox4.Text;
+            excelworksheet_fin.Range[excelworksheet_fin.Cells[61, 6], excelworksheet_fin.Cells[61, 7]].Merge();
+            // Проверяющий
+            excelworksheet_fin.Range[excelworksheet_fin.Cells[62, 6], excelworksheet_fin.Cells[62, 7]].UnMerge();
+            excelworksheet_fin.Cells[62, 6] = textBox5.Text;
+            excelworksheet_fin.Range[excelworksheet_fin.Cells[62, 6], excelworksheet_fin.Cells[62, 7]].Merge();
+            // Утверждающий 
+            excelworksheet_fin.Range[excelworksheet_fin.Cells[65, 6], excelworksheet_fin.Cells[65, 7]].UnMerge();
+            excelworksheet_fin.Cells[65, 6] = textBox6.Text;
+            excelworksheet_fin.Range[excelworksheet_fin.Cells[65, 6], excelworksheet_fin.Cells[65, 7]].Merge();
+
             int saveNumberString = 0;
             for (int tempi = 2; tempi <= max_poz; tempi++)
             {
@@ -648,7 +689,7 @@ namespace BOM_gen
                         saveNumberString = 0;
                         if(number_sheet >= 3)
                         {
-                            Add_New_Sheet_type2(excelappworkbook_ref);
+                            Add_New_Sheet_type2(excelappworkbook_ref, textBox3.Text);
                         }
                     }
                 }
@@ -740,7 +781,7 @@ namespace BOM_gen
                             number_sheet++;
                             if (number_sheet >= 3)
                             {
-                                Add_New_Sheet_type2(excelappworkbook_ref);
+                                Add_New_Sheet_type2(excelappworkbook_ref, textBox3.Text);
                             }
                             excelworksheet_fin = (Excel.Worksheet)excelsheets_fin.get_Item(number_sheet);
                             excelworksheet_fin.Range[excelworksheet_fin.Cells[(3 * (number_string - (18 + 24 * (number_sheet - 2))) + 2), 4], excelworksheet_fin.Cells[(3 * (number_string - (18 + 24 * (number_sheet - 2))) + 4) , 6]].UnMerge();
@@ -839,7 +880,7 @@ namespace BOM_gen
 
         private void button4_Click(object sender, EventArgs e)
         {
-            Add_New_Sheet_type2(excelappworkbook_ref);
+            Add_New_Sheet_type2(excelappworkbook_ref, textBox3.Text);
 
         }
 
